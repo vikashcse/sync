@@ -1,11 +1,16 @@
 const router = require("express").Router();
+const User = require("../models/User");
+const cors = require("cors");
+
 // Bring in the User Registration function
 const {
   userAuth,
   userLogin,
   checkRole,
   userRegister,
-  serializeUser
+  serializeUser,
+  createEvent,
+  getAllEvent
 } = require("../utils/Auth");
 
 // Users Registeration Route
@@ -82,5 +87,13 @@ router.get(
     return res.json("Super admin and Admin");
   }
 );
+
+router.post('/createEvent',async (req,res)=>{
+  await createEvent(req.body,res)
+})
+
+router.get('/getEvents',async (req,res)=>{
+  await getAllEvent(res)
+})
 
 module.exports = router;

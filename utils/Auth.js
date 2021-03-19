@@ -2,6 +2,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const passport = require("passport");
 const User = require("../models/User");
+const Event = require("../models/Event")
 const { SECRET } = require("../config");
 
 /**
@@ -38,7 +39,7 @@ const userRegister = async (userDets, role, res) => {
 
     await newUser.save();
     return res.status(201).json({
-      message: "Hurry! now you are successfully registred. Please nor login.",
+      message: "You are successfully registred. Please nor login.",
       success: true
     });
   } catch (err) {
@@ -141,10 +142,36 @@ const serializeUser = user => {
   };
 };
 
+const createEvent = async (eventData, res) => {
+  const event = new Event({
+    ...eventData
+  });
+
+  await event.save();
+  return res.status(201).json({
+    message: "You have successfully created an event",
+    success: true
+  });
+}
+
+const getAllEvent = async (res)=>{
+  all=await	Event.find((err,docs)=>{
+		if(!err){
+      res.send(docs);
+      return docs;
+      console.log(docs);
+    }
+		else{console.log('Error:'+ JSON.stringify(err,undefined,2));}
+	});
+}
+
+
 module.exports = {
   userAuth,
   checkRole,
   userLogin,
   userRegister,
-  serializeUser
+  serializeUser,
+  createEvent,
+  getAllEvent
 };
